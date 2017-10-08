@@ -7,7 +7,6 @@ let LocalStrategy = require('passport-local');
 
 // Set up local strategy
 const localJwtOptions = { usernameField: 'email' };
-const localJwtOptions = { usernameField: 'email' };
 
 const localLogin = new LocalStrategy(localJwtOptions, function(
   email,
