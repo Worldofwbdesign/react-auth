@@ -7,23 +7,36 @@ let LocalStrategy = require('passport-local');
 
 // Set up local strategy
 const localJwtOptions = { usernameField: 'email' };
+const localJwtOptions = { usernameField: 'email' };
 
-const localLogin = new LocalStrategy(localJwtOptions, function(email, password, done) {
+const localLogin = new LocalStrategy(localJwtOptions, function(
+  email,
+  password,
+  done
+) {
   // Check if entered email and passport are valid
   // and call done with user
   // otherwise call done with false
-  User.findOne({ email:email }, function(err, user) {
-    if (err) { return done(err, false); }
-    if (!user) { return done(null, false); }
+  User.findOne({ email: email }, function(err, user) {
+    if (err) {
+      return done(err, false);
+    }
+    if (!user) {
+      return done(null, false);
+    }
 
     // Compare passwords - is 'passworrd' equal to user.password?
     user.comparePassword(password, function(err, isMatch) {
-      if (err) {return done(err, false); }
-      if(!isMatch) { return done(null,false) }
+      if (err) {
+        return done(err, false);
+      }
+      if (!isMatch) {
+        return done(null, false);
+      }
 
       return done(null, user);
-    })
-  })
+    });
+  });
 });
 
 // Setup options for Jwt strategy
@@ -38,14 +51,16 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   // If it does, call done with that other
   // Call done without user object
   User.findById(payload.sub, function(err, user) {
-    if (err) { return done(err, false); }
+    if (err) {
+      return done(err, false);
+    }
 
     if (user) {
       return done(null, user);
     } else {
       return done(null, false);
     }
-  })
+  });
 });
 
 passport.use(jwtLogin);
